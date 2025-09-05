@@ -1,0 +1,215 @@
+﻿@model BLOG.Models.kullanicilar
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up</title>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome/css/fontawesome.min.css">
+    <style>
+        body {
+            background-image: url('/images/BLOG.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-title {
+            font-size: 85px;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .outer-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sign-up-box {
+            background-color: #e3ede5;
+            padding: 40px;
+            border-radius: 8px;
+            width: 400px;
+            text-align: center;
+        }
+
+            .sign-up-box input {
+                display: block;
+                width: calc(100% - 20px);
+                margin: 10px auto;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .sign-up-box button {
+                width: calc(100% - 20px);
+                margin: 10px auto;
+                padding: 10px;
+                border: none;
+                border-radius: 4px;
+                background-color: #50afcf;
+                color: #fff;
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+                .sign-up-box button:hover {
+                    background-color: #007bff;
+                }
+
+        .file-input-container {
+            display: flex;
+            align-items: center;
+            margin: 10px auto;
+        }
+
+            .file-input-container input[type="file"] {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+        .profile-preview {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #e3ede5;
+            margin-left: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+            .profile-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: none;
+            }
+
+            .profile-preview::before {
+                content: "Profil Fotoğrafı";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #888;
+                pointer-events: none;
+                display: block;
+                font-size: 14px;
+                text-align: center;
+            }
+
+            .profile-preview img.show {
+                display: block;
+            }
+
+        .footer-text {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1 class="page-title">THOUGHTER</h1>
+    <div class="outer-box">
+        <div class="sign-up-box">
+            <h4 class="login-text">KAYIT OL</h4>
+            <form asp-controller="Account" asp-action="SignUp" method="post" enctype="multipart/form-data">
+                <input asp-for="KullaniciAd" placeholder="Kullanıcı Adı" />
+                <span asp-validation-for="KullaniciAd" class="text-danger"></span>
+
+                <input asp-for="Email" type="email" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+
+                <input asp-for="Sifre" type="password" placeholder="Şifre" />
+                <span asp-validation-for="Sifre" class="text-danger"></span>
+
+                <input asp-for="SifreTekrar" type="password" placeholder="Şifre (TEKRAR)" />
+                <span asp-validation-for="SifreTekrar" class="text-danger"></span>
+
+                <div class="file-input-container">
+                    <input type="file" id="profilFoto" name="profilFoto" accept="image/*" />
+                    <div class="profile-preview" id="previewContainer">
+                        <img id="profilFotoPreview" src="" alt="Profil Fotoğrafı" />
+                    </div>
+                </div>
+
+                <span asp-validation-for="PPUrl" class="text-danger"></span>
+
+                <button type="submit">Kayıt Ol</button>
+            </form>
+        </div>
+    </div>
+    <small class="footer-text">2024-BLOG</small>
+
+    <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('profilFoto').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('profilFotoPreview');
+            const previewContainer = document.getElementById('previewContainer');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                    previewContainer.querySelector('::before').style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+                preview.classList.remove('show');
+                previewContainer.querySelector('::before').style.display = 'block';
+            }
+        });
+
+        document.getElementById('previewContainer').addEventListener('click', function () {
+            const fileInput = document.getElementById('profilFoto');
+            const preview = document.getElementById('profilFotoPreview');
+            const previewContainer = document.getElementById('previewContainer');
+
+            // Fotoğrafı sıfırla
+            fileInput.value = '';
+            preview.src = '';
+            preview.classList.remove('show');
+            previewContainer.querySelector('::before').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
