@@ -1,0 +1,139 @@
+﻿@model BLOG.Models.kullanicilar
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome/css/fontawesome.min.css">
+    <style>
+        body {
+            background-image: url('/images/BLOG.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-title {
+            font-size: 85px;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .outer-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            background-color: rgba(219,231,227, 0.0);
+        }
+
+        .login-box {
+            background-color: rgba(227, 237, 229, 0.9);
+            padding: 60px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            text-align: center;
+        }
+
+        .login-text {
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            display: block;
+            width: calc(100% - 20px);
+            margin: 10px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-box button {
+            width: calc(100% - 20px);
+            margin: 10px auto;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #50afcf;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+            .login-box button:hover {
+                background-color: #007bff;
+            }
+
+        .footer-text {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>        
+    <h1 class="page-title">THOUGHTER</h1>
+    <div class="outer-box">
+        <div class="login-box">
+            <h4 class="login-text">Giriş</h4>
+            <form asp-controller="Account" asp-action="Register" method="post">
+                <input asp-for="KullaniciAd" placeholder="Kullanıcı Adı" />
+                <span asp-validation-for="KullaniciAd" class="text-danger"></span>
+
+                <input asp-for="Sifre" type="password" placeholder="Şifre" />
+                <span asp-validation-for="Sifre" class="text-danger"></span>
+
+                <button type="submit">Giriş Yap</button>
+            </form>
+            <button id="btn-forgot">Şifremi/Kullanıcı Adımı Unuttum</button>
+            <a href="@Url.Action("SignUp", "Account")" id="btn-register" class="btn btn-secondary">HESABIN YOK MU? KAYIT OL</a>
+        </div>
+    </div>
+    <small class="footer-text">2024-BLOG</small>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('btn-forgot').addEventListener('click', function () {
+            $('#forgotModal').modal('show');
+        });
+    </script>
+
+    <div class="modal fade" id="forgotModal" tabindex="-1" role="dialog" aria-labelledby="forgotModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forgotModalLabel">E-posta Girin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form asp-controller="Account" asp-action="ForgotPassword" method="post">
+                        <div class="form-group">
+                            <label for="email">E-posta Adresiniz:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Gönder</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
